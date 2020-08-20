@@ -1,0 +1,17 @@
+.directory
+.tern-port
+.tern-project
+*.pem
+backup/
+semantic/
+node_modules/
+/nbproject/private/
+nbproject/
+public/images
+public/
+daemon/
+.env
+package-lock.json
+.env.bak
+package-lock.json
+*.code-workspace
