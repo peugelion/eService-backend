@@ -26,46 +26,27 @@ const poolHubie = new sql.ConnectionPool(configHubie).connect()
 
 module.exports = function () {
   return {
-    workOrdersList: async () => {
-      const pool = await poolHubie
-      return await pool.request().execute('sp_PageServisRadniNalogPregled_eServis');
+    workOrdersList: async (filters) => {
+      const pool = await poolHubie;
+      let result = null;
+      if (Object.keys(filters).length === 0 && filters.constructor === Object) { // empty filters object
+        result = await pool.request().execute('sp_PageServisRadniNalogPregled_eServis');
+      } else {
+        result = await pool.request()
+        // .input('fk_dokument', sql.BigInt, 0)
+        .input('Broj_dokumentaOd', sql.BigInt, +filters.docNumFrom)
+        .input('Broj_dokumentaDo', sql.BigInt, +filters.docNumTo)
+        .input('Datum_Od', sql.NVarChar, filters.dateFrom)
+        .input('Datum_Do', sql.NVarChar, filters.dateTo)
+        .input('TipDatuma', sql.TinyInt, +filters.dateType)
+        // .input('fk_artikal', sql.Int, 0)
+        // .input('Fk_partner', sql.Int, 0)
+        .input('Fk_ST_90', sql.Int, +filters.workorderStatus)
+        // .input('SN_Global', sql.NVarChar, '')
+        // .input('fk_st_22', sql.Int, 0)
+        .execute('sp_PageServisRadniNalogPregled_eServis');
+      }
+      return await result;
     }
-    // workOrdersList: async (companyCode, fiscalYear, lang_id, fk_seller, date) => {
-    //   const pool = await poolHubie
-    //   return await pool.request()
-    //     .input('SifraPreduzeca', sql.Int, companyCode)
-    //     .input('fk_poslovna_Godina', sql.Int, fiscalYear)
-    //     .input('Jezik_id', sql.Int, lang_id)
-    //     .input('Fk_Prodavac', sql.Int, fk_seller)
-    //     .input('datum', sql.NVarChar, date)
-    //     .execute('sp_RptDnevniPregledRute');
-    // }
-		// login: async (user, pass) => {
-		// 	console.log('		hubie-interface.js user is logging in :', user, pass)
-		// 	const pool = await poolHubie_web
-		// 	return await pool.request()
-		// 		.input('Username', sql.NVarChar, user)
-		// 		.input('Password', sql.NVarChar, pass)
-		// 		.execute('sv_LogIn')
-		// },
-
-		// vratiRS: function(companyCode, lang_id, appUser, whichTable, FkStSt) {
-		// 	return poolHubie.request()
-		// 						 .input('Sifra_Preduzeca', sql.Int, companyCode)
-		// 						 .input('jezik_id', sql.Int, lang_id)
-		// 						 .input('sifra_nvar', sql.NVarChar(16), appUser)
-		// 						 .input('KojaTabela', sql.NVarChar(64), whichTable)
-		// 						 .input('FkStSt', sql.Int, FkStSt)
-		// 				.execute('sp_VratiRS');
-		// },
-
-		// vratiPodredjeneRadnike: function(companyCode, lang_id, fk_appUser) {
-		// 	return poolHubie.request()
-		// 						 .input('Sifra_Preduzeca', sql.Int, companyCode)
-		// 						 .input('Jezik_Id', sql.Int, lang_id)
-		// 						 .input('Sifra_Radnika', sql.Int, fk_appUser)
-		// 				.execute('sp_VratiPodredjeneRadnike');
-		// },
-		// ova procedura vraca konkretne podatke o ruti za izabranog radnika - prodavca, podatke o njegovim posetama u danu
 	}
 }();
