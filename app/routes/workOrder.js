@@ -25,14 +25,37 @@ router.get('/workOrdersOverview', async (req, res) => {
     let filters = JSON.parse(req.query.filters);
     filters.dateFrom = filters.dateFrom ? parseSrbDateParam(filters.dateFrom) : null;
     filters.dateTo = filters.dateTo ? parseSrbDateParam(filters.dateTo) : null;
-    
-console.log("filters = ", filters);
 
     result = await hubieApi.workOrdersList(filters);
     res.json(result);
-
 	} catch (err) {
 		console.log(`/workOrdersOverview err ${err}`)
+		res.json(err)
+	}
+});
+
+// return workorder
+router.get('/workorder/:id', async (req, res) => {
+	try {
+		const workorderID = req.params.id;
+
+    result = await hubieApi.getWorkorder(workorderID);
+    res.json(result);
+	} catch (err) {
+		console.log(`/workorder/:id err ${err}`)
+		res.json(err)
+	}
+});
+
+// search workers to assign
+router.get('/findWorkersByNameOrCode/:nameOrCode', async (req, res) => {
+	try {
+    const nameOrCode = req.params.nameOrCode;
+
+    result = await hubieApi.findWorkersByNameOrCode(nameOrCode);
+    res.json(result);
+	} catch (err) {
+		console.log(`/findWorkersByNameOrCode err ${err}`)
 		res.json(err)
 	}
 });

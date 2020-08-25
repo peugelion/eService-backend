@@ -47,6 +47,22 @@ module.exports = function () {
         .execute('sp_PageServisRadniNalogPregled_eServis');
       }
       return await result;
+    },
+    getWorkorder: async (workorderID) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('fk_dokument', sql.BigInt, workorderID)
+        .execute('sp_PageServisRadniNalogPregled_eServis');
+
+      return await result;
+    },
+    findWorkersByNameOrCode: async (nameOrCode) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('SearchForLIKE', sql.NVarChar, nameOrCode)
+        .execute('sp_PageRadnik_eServis');
+        
+      return await result;
     }
 	}
 }();

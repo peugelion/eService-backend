@@ -39,7 +39,7 @@ app.use(session({
 app.use(cookieParser());
 app.use(flash());
 
-const corsWhitelist = ['http://localhost', 'http://localhost:4200',
+const corsWhitelist = ['http://localhost', 'http://localhost:4200', 'http://localhost:3000',
   'http://127.0.0.1', 'http://127.0.0.1:3000',  'http://127.0.0.1:4200',
   'http://10.11.2.219:4200', 'http://10.11.2.219', 'https://10.11.2.219:443', 'http://10.11.2.219:3000']
 const corsOptions = {
