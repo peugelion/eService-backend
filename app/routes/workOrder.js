@@ -23,9 +23,12 @@ router.get('/workOrdersOverview', async (req, res) => {
     // 	Fk_PoslovnaGodina = req.session.Fk_PoslovnaGodina,
 
     let filters = JSON.parse(req.query.filters);
-    filters.dateFrom = filters.dateFrom ? parseSrbDateParam(filters.dateFrom) : null;
-    filters.dateTo = filters.dateTo ? parseSrbDateParam(filters.dateTo) : null;
+    if (filters.dateFrom) filters.dateFrom = parseSrbDateParam(filters.dateFrom);
+    if (filters.dateTo) filters.dateTo = parseSrbDateParam(filters.dateTo);
 
+    // filters.dateFrom = filters.dateFrom ? parseSrbDateParam(filters.dateFrom) : null;
+    // filters.dateTo = filters.dateTo ? parseSrbDateParam(filters.dateTo) : null;
+  
     result = await hubieApi.workOrdersList(filters);
     res.json(result);
 	} catch (err) {
@@ -48,16 +51,38 @@ router.get('/workorder/:id', async (req, res) => {
 });
 
 // search workers to assign
-router.get('/findWorkersByNameOrCode/:nameOrCode', async (req, res) => {
+router.get('/findWorkersByNameOrCode', async (req, res) => {
 	try {
-    const nameOrCode = req.params.nameOrCode;
+    const searchParams = req.query;
 
-    result = await hubieApi.findWorkersByNameOrCode(nameOrCode);
+    result = await hubieApi.findWorkersByNameOrCode(searchParams);
     res.json(result);
 	} catch (err) {
 		console.log(`/findWorkersByNameOrCode err ${err}`)
 		res.json(err)
-	}
+  }
+});
+
+// assign worker to workorder
+router.put('/assignWorker', async (req, res) => {
+  try {
+    const bodyParams = req.body;
+    result = await hubieApi.assignWorker(bodyParams);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json(err.originalError.info);
+  }
+});
+
+// change workorder status
+router.put('/changeWOStatus', async (req, res) => {
+  try {
+    const bodyParams = req.body;
+    result = await hubieApi.changeWOStatus(bodyParams);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json(err.originalError.info);
+  }
 });
 
 module.exports = router;

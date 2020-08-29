@@ -33,17 +33,13 @@ module.exports = function () {
         result = await pool.request().execute('sp_PageServisRadniNalogPregled_eServis');
       } else {
         result = await pool.request()
-        // .input('fk_dokument', sql.BigInt, 0)
+        .input('fk_radnik', sql.Int, filters.workerId)
         .input('Broj_dokumentaOd', sql.BigInt, +filters.docNumFrom)
         .input('Broj_dokumentaDo', sql.BigInt, +filters.docNumTo)
         .input('Datum_Od', sql.NVarChar, filters.dateFrom)
         .input('Datum_Do', sql.NVarChar, filters.dateTo)
         .input('TipDatuma', sql.TinyInt, +filters.dateType)
-        // .input('fk_artikal', sql.Int, 0)
-        // .input('Fk_partner', sql.Int, 0)
         .input('Fk_ST_90', sql.Int, +filters.workorderStatus)
-        // .input('SN_Global', sql.NVarChar, '')
-        // .input('fk_st_22', sql.Int, 0)
         .execute('sp_PageServisRadniNalogPregled_eServis');
       }
       return await result;
@@ -56,11 +52,32 @@ module.exports = function () {
 
       return await result;
     },
-    findWorkersByNameOrCode: async (nameOrCode) => {
+    findWorkersByNameOrCode: async (searchParams) => {
       const pool = await poolHubie;
       result = await pool.request()
-        .input('SearchForLIKE', sql.NVarChar, nameOrCode)
+        .input('id', sql.Int, +searchParams.id)
+        .input('SearchForLIKE', sql.NVarChar, searchParams.searchVal)
         .execute('sp_PageRadnik_eServis');
+        
+      return await result;
+    },
+    assignWorker: async (params) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('Kor_id', sql.Int, params.userId)
+        .input('fk_dokument', sql.BigInt, params.workorderId)
+        .input('fk_radnik', sql.Int, params.workerId)
+        .execute('sp_UpdateRadnik_eServis');
+
+      return await result;
+    },
+    changeWOStatus: async (params) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('Kor_id', sql.Int, params.userId)
+        .input('Fk_DokumentServis', sql.BigInt, params.workorderId)
+        .input('ZeljeniStatus', sql.Int, params.status)
+        .execute('sp_ServisPromenaStatusa_eServis');
         
       return await result;
     }
