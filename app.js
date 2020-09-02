@@ -8,10 +8,10 @@ router = express.Router(),
 bodyParser = require('body-parser'),
 path = require('path'),
 fs = require('fs'),
-flash = require('connect-flash'),
 methodOverride = require('method-override'),
 session = require('express-session'),
-cookieParser = require('cookie-parser'),
+// flash = require('connect-flash'),
+// cookieParser = require('cookie-parser'),
 app = express();
 var staticRoot = __dirname + '/public';
 
@@ -33,16 +33,18 @@ app.use(session({
 		httpOnly: true,
 		secure: false,
 		// maxAge: 30 * 60 * 1000,
-		maxAge: 7 * 24 * 60 * 60 * 1000, // 5 days
+		maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 	}
 }));
 
-app.use(cookieParser());
-app.use(flash());
+// app.use(cookieParser());
+// app.use(flash());
 
 // use the REST routes
 const workOrderRoutes = require('./app/routes/workOrder');
 app.use('/api', workOrderRoutes);
+const loginLogoutRoutes = require('./app/routes/index');
+app.use(loginLogoutRoutes);
 
 // middleware to use on every request
 /* https://stackoverflow.com/questions/49640365/mean-nodejs-server-for-angular-app-how-do-i-serve-angular-routes */

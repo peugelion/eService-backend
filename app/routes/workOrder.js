@@ -1,9 +1,7 @@
 let express = require('express'),
     router = express.Router(),
-    hubieApi = require('../models/hubie-interface'),
-    moment = require('moment');
-
-moment.locale('sr');
+    authMw = require('../middleware'),
+    hubieApi = require('../models/hubie-interface')
 
 const parseSrbDateParam = (date) => {
 	if (date && date.includes(' ')) {
@@ -16,7 +14,9 @@ const parseSrbDateParam = (date) => {
 };
 
 // return work orders list
-router.get('/workOrdersOverview', async (req, res) => {
+router.get('/workOrdersOverview', authMw.isLoggedIn, async (req, res) => {
+  console.log('req.sessionID = ', req.sessionID);
+  console.log('req.session.fk_radnik = ', req.session.fk_radnik);
 	try {
 		// const SifraPreduzeca = req.session.SifraPreduzeca,
 		// 	Fk_Jezik = req.session.Fk_Jezik,
@@ -26,9 +26,6 @@ router.get('/workOrdersOverview', async (req, res) => {
     if (filters.dateFrom) filters.dateFrom = parseSrbDateParam(filters.dateFrom);
     if (filters.dateTo) filters.dateTo = parseSrbDateParam(filters.dateTo);
 
-    // filters.dateFrom = filters.dateFrom ? parseSrbDateParam(filters.dateFrom) : null;
-    // filters.dateTo = filters.dateTo ? parseSrbDateParam(filters.dateTo) : null;
-  
     result = await hubieApi.workOrdersList(filters);
     res.json(result);
 	} catch (err) {
@@ -38,7 +35,7 @@ router.get('/workOrdersOverview', async (req, res) => {
 });
 
 // return workorder
-router.get('/workorder/:id', async (req, res) => {
+router.get('/workorder/:id', authMw.isLoggedIn, async (req, res) => {
 	try {
 		const workorderID = req.params.id;
 
@@ -51,7 +48,7 @@ router.get('/workorder/:id', async (req, res) => {
 });
 
 // search workers to assign
-router.get('/findWorkersByNameOrCode', async (req, res) => {
+router.get('/findWorkersByNameOrCode', authMw.isLoggedIn, async (req, res) => {
 	try {
     const searchParams = req.query;
 
@@ -64,7 +61,7 @@ router.get('/findWorkersByNameOrCode', async (req, res) => {
 });
 
 // assign worker to workorder
-router.put('/assignWorker', async (req, res) => {
+router.put('/assignWorker', authMw.isLoggedIn, async (req, res) => {
   try {
     const bodyParams = req.body;
     result = await hubieApi.assignWorker(bodyParams);
@@ -75,7 +72,7 @@ router.put('/assignWorker', async (req, res) => {
 });
 
 // change workorder status
-router.put('/changeWOStatus', async (req, res) => {
+router.put('/changeWOStatus', authMw.isLoggedIn, async (req, res) => {
   try {
     const bodyParams = req.body;
     result = await hubieApi.changeWOStatus(bodyParams);

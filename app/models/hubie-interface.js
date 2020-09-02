@@ -26,6 +26,14 @@ const poolHubie = new sql.ConnectionPool(configHubie).connect()
 
 module.exports = function () {
   return {
+    login: async (user, pass) => {
+			console.log('		hubie-interface.js user is logging in :', user, pass)
+			const pool = await poolHubie
+			return await pool.request()
+				.input('username', sql.NVarChar, user)
+				.input('password', sql.NVarChar, pass)
+				.execute('sp_LogIn_eServis')
+		},
     workOrdersList: async (filters) => {
       const pool = await poolHubie;
       let result = null;
