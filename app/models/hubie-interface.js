@@ -4,7 +4,7 @@ const configHubie = {
 	'user': process.env.DB_USER || 'bla',
 	'password': process.env.DB_PASS || 'password',
 	'server': process.env.DB_HOST || '127.0.0.1',
-	'database': 'Hubie',
+	'database': 'Hubie_web',
 	'connectionTimeout': 45000,
 	'requestTimeout': 100000,
 	'pool': {
@@ -37,9 +37,9 @@ module.exports = function () {
     workOrdersList: async (filters) => {
       const pool = await poolHubie;
       let result = null;
-      if (Object.keys(filters).length === 0 && filters.constructor === Object) { // empty filters object
-        result = await pool.request().execute('sp_PageServisRadniNalogPregled_eServis');
-      } else {
+      // if (Object.keys(filters).length === 0 && filters.constructor === Object) { // empty filters object
+      //   result = await pool.request().execute('sp_PageServisRadniNalogPregled_eServis');
+      // } else {
         result = await pool.request()
         .input('fk_radnik', sql.Int, filters.workerId)
         .input('Broj_dokumentaOd', sql.BigInt, +filters.docNumFrom)
@@ -49,7 +49,7 @@ module.exports = function () {
         .input('TipDatuma', sql.TinyInt, +filters.dateType)
         .input('Fk_ST_90', sql.Int, +filters.workorderStatus)
         .execute('sp_PageServisRadniNalogPregled_eServis');
-      }
+      // }
       return await result;
     },
     getWorkorder: async (workorderID) => {

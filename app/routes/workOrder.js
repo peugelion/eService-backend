@@ -15,13 +15,7 @@ const parseSrbDateParam = (date) => {
 
 // return work orders list
 router.get('/workOrdersOverview', authMw.isLoggedIn, async (req, res) => {
-  console.log('req.sessionID = ', req.sessionID);
-  console.log('req.session.fk_radnik = ', req.session.fk_radnik);
 	try {
-		// const SifraPreduzeca = req.session.SifraPreduzeca,
-		// 	Fk_Jezik = req.session.Fk_Jezik,
-    // 	Fk_PoslovnaGodina = req.session.Fk_PoslovnaGodina,
-
     let filters = JSON.parse(req.query.filters);
     if (filters.dateFrom) filters.dateFrom = parseSrbDateParam(filters.dateFrom);
     if (filters.dateTo) filters.dateTo = parseSrbDateParam(filters.dateTo);

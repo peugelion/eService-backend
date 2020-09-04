@@ -23,7 +23,7 @@ middlewareObj.handleLogin = async (req, res) => {
 	} catch (err) {
 		console.log('err in middlewareObj.handleLogin', err);
 		if (err.message === 'IncorrectLoginData') {
-			res.sendStatus(401); // Unauthorized
+			res.sendStatus(401);
 		} else {
 			res.status(400).send(err.message)
     }
@@ -42,10 +42,6 @@ middlewareObj.authenticate = async (req, res) => {
   req.session.nivo_pristupa = result.recordset[0].NivoPristupa;
   
   return result.recordset[0];
-	// } catch (err) {
-	// 	console.log('err in middlewareObj.authenticate', err.message);
-	// 	res.sendStatus(401); // Unauthorized
-	// };
 }
 
 module.exports = middlewareObj;

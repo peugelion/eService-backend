@@ -10,8 +10,6 @@ path = require('path'),
 fs = require('fs'),
 methodOverride = require('method-override'),
 session = require('express-session'),
-// flash = require('connect-flash'),
-// cookieParser = require('cookie-parser'),
 app = express();
 var staticRoot = __dirname + '/public';
 
@@ -32,13 +30,9 @@ app.use(session({
     path: '/',
 		httpOnly: true,
 		secure: false,
-		// maxAge: 30 * 60 * 1000,
-		maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+		maxAge: 24 * 60 * 60 * 1000, // 1 day
 	}
 }));
-
-// app.use(cookieParser());
-// app.use(flash());
 
 // use the REST routes
 const workOrderRoutes = require('./app/routes/workOrder');
@@ -64,12 +58,6 @@ app.use(function (req, res, next) {
 	}
 });
 
-// with this I'm serving the public directory
-// const maxAge = 99 * 24 * 3600 * 1000; // 7 days, 3600000msec == 1hour
-// app.use(express.static(__dirname + "/public", {
-// 	maxAge: maxAge
-// }));
-
 app.use(router);
 
 // Start the web server
@@ -87,7 +75,7 @@ app.use(router);
 const server = app.listen(process.env.HTTP_PORT || 3000, () => {
   const host = server.address().address
   const port = server.address().port
-  console.log(`PPS supervisor server started! Listening at http://${host}:${port}`);
+  console.log(`eService server started! Listening at http://${host}:${port}`);
 });
 // 	const serverHttps = app.listen(process.env.HTTPS_PORT || 443, () => {
 // 		const host = serverHttps.address().address
