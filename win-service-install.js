@@ -4,9 +4,8 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'Ep Supervizor Web BO Server [node.js]',
-  description: 'mssql <-> web api [node.js BO] \ web app server [angular 6].',
-  // script: 'C:\\Projects\\pps-REST-backend\\app.js',
+  name:'Ep eService web backend Server [node.js]',
+  description: 'mssql <-> web api [node.js BO] \ web app server [angular 7].',
   script: require('path').join(__dirname,'\\app.js'),
   nodeOptions: [
     '--harmony',

@@ -60,6 +60,14 @@ module.exports = function () {
 
       return await result;
     },
+    getRenderedServices: async (workorderID) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('fk_dokument', sql.BigInt, workorderID)
+        .execute('sp_PageRadniNalogUsluge_eServis');
+
+      return await result;
+    },
     findWorkersByNameOrCode: async (searchParams) => {
       const pool = await poolHubie;
       result = await pool.request()

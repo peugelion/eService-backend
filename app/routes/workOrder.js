@@ -41,6 +41,19 @@ router.get('/workorder/:id', authMw.isLoggedIn, async (req, res) => {
 	}
 });
 
+// return rendered services
+router.get('/renderedServices/:id', authMw.isLoggedIn, async (req, res) => {
+	try {
+		const workorderID = req.params.id;
+
+    result = await hubieApi.getRenderedServices(workorderID);
+    res.json(result);
+	} catch (err) {
+		console.log(`/renderedServices/:id err ${err}`)
+		res.json(err)
+	}
+});
+
 // search workers to assign
 router.get('/findWorkersByNameOrCode', authMw.isLoggedIn, async (req, res) => {
 	try {
