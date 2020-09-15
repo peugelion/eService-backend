@@ -37,6 +37,8 @@ app.use(session({
 // use the REST routes
 const workOrderRoutes = require('./app/routes/workOrder');
 app.use('/api', workOrderRoutes);
+const renderedSrvRoutes = require('./app/routes/rendered-services');
+app.use('/api', renderedSrvRoutes);
 const loginLogoutRoutes = require('./app/routes/index');
 app.use(loginLogoutRoutes);
 

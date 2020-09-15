@@ -1,4 +1,5 @@
-const sql = require('mssql')
+const sql = require('mssql');
+const { param } = require('../routes/workOrder');
 
 const configHubie = {
 	'user': process.env.DB_USER || 'bla',
@@ -95,6 +96,63 @@ module.exports = function () {
         .input('ZeljeniStatus', sql.Int, params.status)
         .execute('sp_ServisPromenaStatusa_eServis');
         
+      return await result;
+    },
+
+
+    allavailableRenderedServices: async (searchParams) => {
+      const pool = await poolHubie;
+      result = await pool.request()
+        .input('id', sql.Int, +searchParams.id)
+        .input('SearchForLIKE', sql.NVarChar, searchParams.searchVal)
+        .execute('sp_VratiUsluge_eServis');
+        
+      return await result;
+    },
+    saveRenderedService: async (params) => {
+      const pool = await poolHubie;
+      let result = await pool.request()
+        .input('kor_id', sql.Int, params.userId)
+        .input('Fk_Dokument', sql.BigInt, params.fk_dokument)
+        .input('fk_Usluga', sql.Int, params.selectedService)
+        .input('fk_Radnik', sql.Int, params.selectedWorker)
+        .input('Kolicina', sql.Float, params.quantity)
+        .input('Komentar', sql.NVarChar, params.comment)
+        .input('Datum_Pocetka', sql.NVarChar, params.startDate)
+        .input('VremePocetka', sql.Int, params.startTime)
+        .input('Datum_Zavrsetka', sql.NVarChar, params.endDate)
+        .input('VremeZavrsetka', sql.Int, params.endTime)
+        .input('UtrosenoSati', sql.Float, parseFloat(params.spentTime))
+        .execute('sp_InsertRadniNalogUsluga_eServis');
+
+      return await result;
+    },
+    editRenderedService: async (params) => {
+      const pool = await poolHubie;
+      let result = await pool.request()
+        .input('kor_id', sql.Int, params.userId)
+        .input('fk_StavkaNaloga', sql.BigInt, params.renderedServiceId)
+        .input('Fk_Dokument', sql.BigInt, params.fk_dokument)
+        .input('fk_Usluga', sql.Int, params.selectedService)
+        .input('fk_Radnik', sql.Int, params.selectedWorker)
+        .input('Kolicina', sql.Float, params.quantity)
+        .input('Komentar', sql.NVarChar, params.comment)
+        .input('Datum_Pocetka', sql.NVarChar, params.startDate)
+        .input('VremePocetka', sql.Int, params.startTime)
+        .input('Datum_Zavrsetka', sql.NVarChar, params.endDate)
+        .input('VremeZavrsetka', sql.Int, params.endTime)
+        .input('UtrosenoSati', sql.Float, parseFloat(params.spentTime))
+        .execute('sp_UpdateRadniNalogUsluga_eServis');
+
+      return await result;
+    },
+    deleteRenderedService: async (serviceId, userId) => {
+      const pool = await poolHubie;
+      let result = await pool.request()
+        .input('kor_id', sql.Int, userId)
+        .input('fk_StavkaNaloga', sql.BigInt, serviceId)
+        .execute('sp_DeleteRadniNalogUsluga_eServis');
+
       return await result;
     }
 	}
