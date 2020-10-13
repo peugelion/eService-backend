@@ -32,6 +32,8 @@ router.post('/saveEditRenderedService', authMw.isLoggedIn, async (req, res) => {
     if (params.startDate) params.startDate = parseSrbDateParam(params.startDate);
     if (params.endDate) params.endDate = parseSrbDateParam(params.endDate);
 
+    console.log('params => ', params);
+
     let result = null;
     if (params.renderedServiceId !== null) result = await hubieApi.editRenderedService(params);
     else result = await hubieApi.saveRenderedService(params);
