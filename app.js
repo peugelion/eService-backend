@@ -35,10 +35,12 @@ app.use(session({
 }));
 
 // use the REST routes
-const workOrderRoutes = require('./app/routes/workOrder');
-app.use('/api', workOrderRoutes);
+const workorderRoutes = require('./app/routes/workorder');
 const renderedSrvRoutes = require('./app/routes/rendered-services');
+const workerTeamsRoutes = require('./app/routes/worker-team');
+app.use('/api', workorderRoutes);
 app.use('/api', renderedSrvRoutes);
+app.use('/api', workerTeamsRoutes);
 const loginLogoutRoutes = require('./app/routes/index');
 app.use(loginLogoutRoutes);
 

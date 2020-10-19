@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const { param } = require('../routes/workOrder');
+// const { param } = require('../routes/workOrder');
 
 const configHubie = {
 	'user': process.env.DB_USER || 'bla',
@@ -19,8 +19,8 @@ const configHubie = {
 	}
 }
 
-/* https://stackoverflow.com/questions/30356148/how-can-i-use-a-single-mssql-connection-pool-across-several-routes-in-an-express */
-/* https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016 */
+// /* https://stackoverflow.com/questions/30356148/how-can-i-use-a-single-mssql-connection-pool-across-several-routes-in-an-express */
+// /* https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016 */
 const poolHubie = new sql.ConnectionPool(configHubie).connect()
 	.then(pool => { console.log('Connected to MSSQL poolHubie'); return pool; })
 	.catch(err => console.log('Database Connection Failed! (poolHubie) Bad Config: ', err))
@@ -28,7 +28,7 @@ const poolHubie = new sql.ConnectionPool(configHubie).connect()
 module.exports = function () {
   return {
     login: async (user, pass) => {
-			console.log('		hubie-interface.js user is logging in :', user, pass)
+      console.log('		hubie-interface.js user is logging in :', user, pass)
 			const pool = await poolHubie
 			return await pool.request()
 				.input('username', sql.NVarChar, user)

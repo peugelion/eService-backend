@@ -1,4 +1,4 @@
-let hubieApi = require('../models/hubie-interface'),
+let { login } = require('../interfaces/login-api'),
 	  middlewareObj = {};
 
 middlewareObj.isLoggedIn = async (req, res, next) => {
@@ -35,7 +35,7 @@ middlewareObj.authenticate = async (req, res) => {
   let username = req.body.username || ''; // req.cookies.hubieLoginUsername;
   let password = req.body.password || ''; // req.cookies.hubieLoginPassword;
 
-  result = await hubieApi.login(username, password);
+  result = await login(username, password);
   req.session.username = username;
   req.session.fk_radnik = result.recordset[0].fk_radnik;
   req.session.sifra = result.recordset[0].sifra;

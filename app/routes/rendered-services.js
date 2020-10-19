@@ -1,7 +1,7 @@
 let express = require('express'),
     router = express.Router(),
     authMw = require('../middleware'),
-    hubieApi = require('../models/hubie-interface')
+    renderedServiceApi = require('../interfaces/rendered-services-api');
 
 const parseSrbDateParam = (date) => {
   if (date && date.includes(' ')) {
@@ -18,10 +18,21 @@ router.get('/allRenderedServices', authMw.isLoggedIn, async (req, res) => {
   try {
     const searchParams = req.query;
 
-    result = await hubieApi.allavailableRenderedServices(searchParams);
+    result = await renderedServiceApi.allavailableRenderedServices(searchParams);
     res.json(result);
 	} catch (err) {
 		console.log(`/allAvailableSrv err ${err}`)
+		res.json(err)
+	}
+});
+
+// return rendered services for a workorder
+router.get('/renderedServices/:workorderID', authMw.isLoggedIn, async (req, res) => {
+	try {
+    result = await renderedServiceApi.getRenderedServices(req.params.workorderID);
+    res.json(result);
+	} catch (err) {
+		console.log(`/renderedServices/:id err ${err}`)
 		res.json(err)
 	}
 });
@@ -32,11 +43,9 @@ router.post('/saveEditRenderedService', authMw.isLoggedIn, async (req, res) => {
     if (params.startDate) params.startDate = parseSrbDateParam(params.startDate);
     if (params.endDate) params.endDate = parseSrbDateParam(params.endDate);
 
-    console.log('params => ', params);
-
     let result = null;
-    if (params.renderedServiceId !== null) result = await hubieApi.editRenderedService(params);
-    else result = await hubieApi.saveRenderedService(params);
+    if (params.renderedServiceId !== null) result = await renderedServiceApi.editRenderedService(params);
+    else result = await renderedServiceApi.saveRenderedService(params);
     res.json(result);
   } catch (err) {
     console.log(`/saveRenderedService err ${err}`)
@@ -48,7 +57,7 @@ router.delete('/deleteRenderedService/:serviceId', authMw.isLoggedIn, async (req
   try {
     const serviceID = req.params.serviceId;
 
-    result = await hubieApi.deleteRenderedService(serviceID, req.session.fk_radnik);
+    result = await renderedServiceApi.deleteRenderedService(serviceID, req.session.fk_radnik);
     res.json(result);
   } catch (err) {
     console.log(`/deleteRenderedService err ${err}`)
