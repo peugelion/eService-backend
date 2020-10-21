@@ -5,7 +5,7 @@ async function findWorkersByNameOrCode(searchParams) {
   const pool = await poolHubie;
   result = await pool.request()
     .input('id', sql.Int, +searchParams.id)
-    .input('SearchForLIKE', sql.NVarChar, searchParams.searchVal)
+    .input('SearchForLIKE', sql.NVarChar, searchParams.nameOrCode)
     .execute('sp_PageRadnik_eServis');
     
   return await result;

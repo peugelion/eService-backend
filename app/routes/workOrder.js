@@ -52,4 +52,14 @@ router.put('/changeWOStatus', authMw.isLoggedIn, async (req, res) => {
   }
 });
 
+// get malfunction types
+router.get('/malfunctionTypes', authMw.isLoggedIn, async (req, res) => {
+  try {
+    result = await workorderApi.getMalfunctionTypes();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json(err.originalError.info);
+  }
+});
+
 module.exports = router;

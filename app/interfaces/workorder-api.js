@@ -40,8 +40,17 @@ async function changeWOStatus(params) {
   return await result;
 }
 
+async function getMalfunctionTypes() {
+  const pool = await poolHubie;
+  result = await pool.request()
+    .execute('sp_VratiTipKvara_eServis');
+
+  return await result;
+}
+
 module.exports = {
   workOrdersList,
   getWorkorder,
-  changeWOStatus
+  changeWOStatus,
+  getMalfunctionTypes
 }
