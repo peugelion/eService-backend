@@ -39,10 +39,14 @@ const workorderRoutes = require('./app/routes/workorder');
 const renderedSrvRoutes = require('./app/routes/rendered-services');
 const workerTeamsRoutes = require('./app/routes/worker-team');
 const assetRoutes = require('./app/routes/asset');
+const partnerRoutes = require('./app/routes/partner');
+const partRoutes = require('./app/routes/part');
 app.use('/api', workorderRoutes);
 app.use('/api', renderedSrvRoutes);
 app.use('/api', workerTeamsRoutes);
 app.use('/api', assetRoutes);
+app.use('/api', partnerRoutes);
+app.use('/api', partRoutes);
 const loginLogoutRoutes = require('./app/routes/index');
 app.use(loginLogoutRoutes);
 

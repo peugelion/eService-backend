@@ -1,17 +1,17 @@
 let express = require('express'),
     router = express.Router(),
     authMw = require('../middleware'),
-    assetApi = require('../interfaces/asset-api');
+    partnerApi = require('../interfaces/partner-api');
 
 // search assets
-router.get('/findAssetsByNameOrCode', authMw.isLoggedIn, async (req, res) => {
+router.get('/findPartnersByNameOrCode', authMw.isLoggedIn, async (req, res) => {
 	try {
     const searchParams = req.query;
 
-    result = await assetApi.findAssetsByNameOrCode(searchParams);
+    result = await partnerApi.findPartnersByNameOrCode(searchParams);
     res.json(result);
 	} catch (err) {
-		console.log(`/findAssetsByNameOrCode err ${err}`)
+		console.log(`/findPartnersByNameOrCode err ${err}`)
 		res.json(err)
   }
 });

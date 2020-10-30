@@ -52,6 +52,20 @@ router.put('/changeWOStatus', authMw.isLoggedIn, async (req, res) => {
   }
 });
 
+// save workorder
+router.post('/saveWorkorder', authMw.isLoggedIn, async (req, res) => {
+  try {
+    const params = req.body;
+    if (params.createdDate) params.createdDate = parseSrbDateParam(params.createdDate);
+
+    let result = await workorderApi.saveWorkorder(params);
+    res.json(result);
+  } catch (err) {
+    console.log(`/saveWorkorder err ${err}`)
+    res.status(500).json(err);
+  }
+});
+
 // get malfunction types
 router.get('/malfunctionTypes', authMw.isLoggedIn, async (req, res) => {
   try {

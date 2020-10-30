@@ -15,7 +15,7 @@ async function allavailableRenderedServices(searchParams) {
   result = await pool.request()
     .input('id', sql.Int, +searchParams.id)
     .input('SearchForLIKE', sql.NVarChar, searchParams.searchVal)
-    .execute('sp_VratiUsluge_eServis');
+    .execute('sp_PageUsluge_eServis');
     
   return await result;
 }

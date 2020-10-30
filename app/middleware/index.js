@@ -37,6 +37,7 @@ middlewareObj.authenticate = async (req, res) => {
 
   result = await login(username, password);
   req.session.username = username;
+  req.session.kor_id = result.recordset[0].Pk_Id;
   req.session.fk_radnik = result.recordset[0].fk_radnik;
   req.session.sifra = result.recordset[0].sifra;
   req.session.nivo_pristupa = result.recordset[0].NivoPristupa;

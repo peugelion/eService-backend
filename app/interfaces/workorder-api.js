@@ -40,6 +40,26 @@ async function changeWOStatus(params) {
   return await result;
 }
 
+async function saveWorkorder(params) {
+  console.log('params in saveWorkorder => ', params);
+  const pool = await poolHubie;
+  let result = await pool.request()
+    .input('Kor_id', sql.Int, params.korId)
+    .input('Datum', sql.NVarChar, params.createdDate)
+    .input('Fk_ST_90', sql.Int, params.woStatus)
+    .input('fk_Partner', sql.Int, params.partner)
+    .input('fk_Artikal', sql.Int, params.asset)
+    .input('fk_TipKvara', sql.Int, params.malfunction)
+    .input('fk_radnik', sql.Int, params.workerAssigned)
+    .input('Komentar', sql.NVarChar, params.comment)
+    .input('PredmetServisa_Adresa', sql.NVarChar, params.address)
+    .input('KontaktOsoba', sql.NVarChar, params.contactPerson)
+    .input('KontaktOsoba_Telefon', sql.NVarChar, params.contactPhone)
+    .execute('sp_InsertServisniRadniNalog_eServis ');
+
+  return await result;
+}
+
 async function getMalfunctionTypes() {
   const pool = await poolHubie;
   result = await pool.request()
@@ -52,5 +72,6 @@ module.exports = {
   workOrdersList,
   getWorkorder,
   changeWOStatus,
+  saveWorkorder,
   getMalfunctionTypes
 }
