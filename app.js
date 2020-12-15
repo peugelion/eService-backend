@@ -42,6 +42,7 @@ const assetRoutes = require('./app/routes/asset');
 const partnerRoutes = require('./app/routes/partner');
 const partRoutes = require('./app/routes/part');
 const warehouseRoutes = require('./app/routes/warehouse');
+const analyticsRoutes = require('./app/routes/analytics');
 app.use('/api', workorderRoutes);
 app.use('/api', renderedSrvRoutes);
 app.use('/api', workerTeamsRoutes);
@@ -49,6 +50,7 @@ app.use('/api', assetRoutes);
 app.use('/api', partnerRoutes);
 app.use('/api', partRoutes);
 app.use('/api', warehouseRoutes);
+app.use('/api', analyticsRoutes);
 const loginLogoutRoutes = require('./app/routes/index');
 app.use(loginLogoutRoutes);
 
