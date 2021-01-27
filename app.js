@@ -10,9 +10,11 @@ path = require('path'),
 fs = require('fs'),
 methodOverride = require('method-override'),
 session = require('express-session'),
+compression = require('compression'),
 app = express();
 var staticRoot = __dirname + '/public';
 
+app.use(compression());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
